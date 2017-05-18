@@ -50,5 +50,16 @@ cd 你的目录
 
 如搜索周杰倫 ，输入以下命令：
 
+os系统：
+
 python search_from_spotify.py 周杰倫
 
+windows系统：
+
+search_from_spotify_for_windows.py 周杰倫
+
+## 6.友情提示
+
+如果搜索不到结果
+
+如周杰伦是无结果的需改成周杰倫。因为代码中加了判断，歌手名必须和网站返回的结果名一致，否则不写入excel里。当然要想周杰伦有结果，把  if singer_name in artist_names:  这句判断条件去掉即可。
