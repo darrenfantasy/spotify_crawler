@@ -57,6 +57,8 @@ if __name__ == '__main__':
 			key = sys.argv[1]
 		elif len(sys.argv)==3:
 			key = sys.argv[1]+' '+sys.argv[2]
+		elif len(sys.argv)==4:
+			key = sys.argv[1]+' '+sys.argv[2]+' '+sys.argv[3]
 		else :
 			print '-----------------------------------'
 			print '参数或者格式不正确！！！！！！！！！！！'
