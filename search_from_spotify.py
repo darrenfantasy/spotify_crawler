@@ -10,8 +10,8 @@ from xlutils.copy import copy
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def add_content(data_sheet,song,singer,album,nrows):
-	row = [song,singer,album]
+def add_content(data_sheet,song,singer,album,track_number,nrows):
+	row = [song,singer,album,track_number]
 	for i in range(len(row)):  
 		data_sheet.write(nrows, i, row[i], set_style('Times New Roman', 220, True))
 
@@ -31,7 +31,7 @@ def write_excel():
     workbook = xlwt.Workbook(encoding='utf-8')    
     #创建sheet  
     data_sheet = workbook.add_sheet('mydemo')  
-    row0 = ['歌曲名','歌手', '专辑名']      
+    row0 = ['歌曲名','歌手', '专辑名','流行程度','在专辑中的顺序']      
     #生成第一行和第二行  
     for i in range(len(row0)):  
         data_sheet.write(0, i, row0[i], set_style('Times New Roman', 220, True))   
@@ -83,13 +83,14 @@ if __name__ == '__main__':
 	album_list = []
 	for i, t in enumerate(results['albums']['items']):
 		if t['album_type']=='album':
-			print ' ', i, t['name']
+			print ' ', i, t['name'],t['id']
 			album_name = t['name']
 			album_list.append(album_name)
 	for x in xrange(len(album_list)):
+		data_list = []
 		results = sp.search(q=album_list[x],limit=50,type='track')
 		for i, t in enumerate(results['tracks']['items']):
-			print ' ', i, t['name']
+			print ' ', i, t['name'],t['popularity'],t['track_number']
 			artist_names = t['artists'][0]['name']
 			name_size = len(t['artists'])
 			if name_size>1:
@@ -97,7 +98,14 @@ if __name__ == '__main__':
 					artist_names = artist_names+","+t["artists"][y]['name']
 			print "artist_names:"+artist_names
 			print "singer_name:"+singer_name
-			if singer_name in artist_names:
-				add_content(sheet,t['name'],artist_names,t['album']['name'],rows)
-				rows = rows+1
+			if singer_name in artist_names and album_list[x]==t['album']['name']:
+				dict = {'name':t['name'],'track_number':t['track_number'],'album_name':t['album']['name'],'singer_name':artist_names}
+				data_list.append(dict)
+				# add_content(sheet,t['name'],artist_names,t['album']['name'],t['popularity'],t['track_number'],rows)
+				# rows = rows+1
+		data_list.sort(key=lambda obj:obj.get('track_number'),reverse=False)
+		for x in xrange(len(data_list)):
+			print data_list[x]['name'],data_list[x]['track_number']
+			add_content(sheet,data_list[x]['name'],data_list[x]["singer_name"],data_list[x]['album_name'],data_list[x]['track_number'],rows)
+			rows = rows+1
 	wb.save('demo.xls')
