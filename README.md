@@ -56,7 +56,7 @@ python search_from_spotify.py 周杰倫
 
 windows系统：
 
-search_from_spotify_for_windows.py 周杰倫
+python search_from_spotify_for_windows.py 周杰倫
 
 ## 6.友情提示
 
