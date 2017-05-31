@@ -71,7 +71,7 @@ if __name__ == '__main__':
 			album_list.append(album_name)
 		for x in xrange(len(album_list)):
 			data_list = []
-			results = sp.search(q=album_list[x],limit=50,type='track')
+			results = sp.search(q=album_list[x]+" "+key,limit=50,type='track')
 			for i, t in enumerate(results['tracks']['items']):
 				artist_name = t['artists'][0]['name']
 				name_size = len(t['artists'])
@@ -80,6 +80,10 @@ if __name__ == '__main__':
 						artist_name = artist_name+","+t["artists"][y]['name']
 				artist_names = str(artist_name)
 				singer_names = singer_name.replace("\r","")
+				print t['name']
+				print artist_names
+				print singer_names
+				print "-------------------"
 				if singer_names in artist_names and album_list[x]==t['album']['name']:
 					dict = {'name':t['name'],'track_number':t['track_number'],'album_name':t['album']['name'],'singer_name':artist_name}
 					data_list.append(dict)
@@ -90,6 +94,7 @@ if __name__ == '__main__':
 				print "rows"+str(rows)
 				add_content(sheet,data_list[x]['name'],data_list[x]["singer_name"],data_list[x]['album_name'],data_list[x]['track_number'],rows)
 				rows = rows+1
+			print "---------------------------------------------"
 		wb.save('demo.xls')
 		print("--------------------save success-------------------")
 		# time.sleep(3)
